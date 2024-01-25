@@ -1,0 +1,202 @@
+snippet isinstance "raise exception isinstante "
+if not isinstance (x, int) or not isinstance(y, int):
+	raise TypeError("Arguments shoud be int")
+endsnippet
+
+# --------------------------------------------------
+
+snippet tcommand "dp.message "
+@dp.message(Command("$1"))
+async def cmd_${1:dice}(message: types.Message):
+    await message.answer_dice(emoji="🎲")
+endsnippet
+
+# --------------------------------------------------
+
+snippet tprepare "startig create bot telegram"
+import asyncio
+import logging
+
+from aiogram import Bot, Dispatcher, types
+from aiogram.filters.command import Command
+
+from config import TOKEN_API
+
+logging.basicConfig(level=logging.INFO)
+
+bot = Bot(TOKEN_API)
+dp = Dispatcher()
+
+async def main():
+    await dp.start_polling(bot)
+
+async def test_info():
+    pass
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
+    # await test_info()
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet unittestprepare "prepare unit test"
+import unittest
+
+from data_request import DataRequest
+
+
+class IsValidUrlStaticTestCase(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_is_not_valid_url(self):
+        res = DataRequest.is_valid_url("https://www.linux.org/whats-new/")
+        print("RESULT: ", res['result'])
+        print("STATUS: ", res['status'])
+        print(f"res: {res}")
+
+        res = DataRequest.is_valid_url("https://www.linux.org/whats-new/")
+        self.assertNotEqual(res['result'], 1)
+        self.assertNotEqual(res['status'], 404)
+
+        self.assertEqual(res['result'], 0)
+        self.assertEqual(res['status'], 403)
+
+        res = DataRequest.is_valid_url("https://jsonplaceholder."
+                                       "typicode.com/todos")
+        self.assertEqual(res['result'], 1)
+        self.assertEqual(res['status'], 200)
+
+    def test_data(self):
+        res = DataRequest()
+
+        data = res.get_data()
+        print("len: ", len(data))
+
+    def tearDown(self):
+        pass
+
+if __name__ == '__main__':
+    unittest.main()
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet pcv "postgres check version"
+connection = psycopg2.connect(
+	host=host_config.host,
+	user=host_config.user,
+	password=host_config.password,
+	database=host_config.db_name
+)
+
+with connection.cursor() as cursor:
+	cursor.execute(
+		"SELECT version();"
+	)
+
+	print(f"Server versino: {cursor.fetchall()}")
+endsnippet
+
+# --------------------------------------------------
+
+snippet ycm "ycm_extra_conf prepare"
+import os
+import ycm_core
+
+flags = [
+    '-Wall',
+    '-Wextra',
+    '-Werror',
+    '-isystem',
+    '-Wno-long-long',
+    '-Wno-variadic-macros',
+    '-fexceptions',
+    '-ferror-limit=10000',
+    '-DNDEBUG',
+    '-std=c++17',
+    '-x',
+    'c++',
+    # '-xc++',
+    # '-xc',
+    "-fPIE",
+    '-I/usr/lib/',
+    '/usr/include',
+    '/usr/local/include',
+    '-DQT_CORE_LIB',
+    '-DQT_GUI_LIB',
+    '-DQT_NETWORK_LIB',
+    '-DQT_QML_LIB',
+    '-DQT_QUICK_LIB',
+    '-DQT_SQL_LIB',
+    '-DQT_WIDGETS_LIB',
+    '-DQT_XML_LIB',
+    '-I./lib/SmartCalculator/includes',
+    '-I./lib/S21Data/includes',
+    '-I./code_c/',
+    '-I/usr/lib/',
+    '-I/usr/lib/qt6/mkspecs/linux-clang',
+    '-I./lib/SmartCalculator/includes',
+    '-I/usr/lib/qt/mkspecs/linux-clang',
+    '-I/home/_who/Qt/6.4.0/gcc_64/include/',
+    '-I/home/_who/Qt/6.4.0/gcc_64/include/QtCore',
+    '-I/home/_who/Qt/6.4.0/gcc_64/include/QtGui',
+    '-I/home/_who/Qt/6.4.0/gcc_64/include/QtWidgets',
+    '-I/home/_who/Qt/6.4.0/gcc_64/include/QtQml'
+]
+
+
+compilation_database_folder = ''
+
+if os.path.exists(compilation_database_folder):
+    database = ycm_core.CompilationDatabase(compilation_database_folder)
+else:
+    database = None
+
+SOURCE_EXTENSIONS = ['.cpp', '.cxx', '.cc', '.c', '.m', '.mm']
+
+
+def DirectoryOfThisScript():
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+def IsHeaderFile(filename):
+    extension = os.path.splitext(filename)[1]
+    return extension in ['.h', '.hxx', '.hpp', '.hh']
+
+
+def GetCompilationInfoForFile(filename):
+    if IsHeaderFile(filename):
+        basename = os.path.splitext(filename)[0]
+        for extension in SOURCE_EXTENSIONS:
+            replacement_file = basename + extension
+            if os.path.exists(replacement_file):
+                compilation_info = database.GetCompilationInfoForFile(
+                    replacement_file)
+                if compilation_info.compiler_flags_:
+                    return compilation_info
+        return None
+    return database.GetCompilationInfoForFile(filename)
+
+
+def Settings(**kwargs):
+    if not database:
+        return {
+            'flags': flags,
+            'include_paths_relative_to_dir': DirectoryOfThisScript()
+        }
+    filename = kwargs['filename']
+    compilation_info = GetCompilationInfoForFile(filename)
+    if not compilation_info:
+        return None
+
+    return {
+        'flags': list(compilation_info.compiler_flags_),
+        'include_paths_relative_to_dir': compilation_info.compiler_working_dir_
+    }
+endsnippet
+
