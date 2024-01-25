@@ -1,0 +1,196 @@
+snippet	cmakemaingtests "prepare cmake for  QTest"
+
+cmake_minimum_required(VERSION 3.14)
+
+project(${1:PROJECT_NAME}} LANGUAGES CXX)
+set(OUT_NAME ${2:OUT_NAME})
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "-g3 -Wall -Wextra -Werror")
+
+set(LIB_MORSE_CODE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../lib)
+set(LIB_MORSE_CODE_HEADERS${CMAKE_CURRENT_SOURCE_DIR}/../../lib/morseCodeLib/includes)
+
+
+set(HEADERS
+    includes/tst_morseCode.hpp
+    )
+
+set(SOURCES
+    srcs/tst_morseCode.cpp
+    )
+
+
+find_package(Qt5 COMPONENTS Core Test REQUIRED)
+
+add_executable(${OUT_NAME} ${SOURCES} ${HEADERS})
+add_test(NAME $2 COMMAND $2)
+enable_testing()
+
+message("LIB PATH -->>>>>  " ${PATH_LIBCONTAINERS})
+message("TARGET -->>>>>  " ${TARGET})
+
+
+set_target_properties(${OUT_NAME}
+        PROPERTIES
+        CMAKE_CXX_STANDARD 20
+        CMAKE_CXX_STANDARD_REQUIRED ON
+        )
+
+
+target_include_directories(${OUT_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/includes
+        ${LIB_MORSE_CODE_PATH}
+        ${LIB_MORSE_CODE_HEADERS}
+        )
+
+find_package(morseCodeLib)
+
+
+target_link_libraries(${OUT_NAME}
+        PUBLIC
+        Qt5::Core
+        Qt5::Test
+        morseCodeLib
+        )
+
+
+endsnippet
+
+snippet	cmakemlib "prepare cmake for lib"
+
+cmake_minimum_required(VERSION 3.14)
+
+project(${1:TestLib} LANGUAGES CXX)
+set(OUT_NAME ${2:testLib})
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_FLAGS "-g3 -Wall -Wextra -Werror")
+
+
+set(HEADERS
+    )
+
+set(SOURCES
+    )
+
+
+
+add_library(${OUT_NAME} SHARED ${SOURCES} ${HEADERS})
+
+find_package(Qt5 COMPONENTS Core REQUIRED)
+
+
+set_target_properties(${OUT_NAME}
+        PROPERTIES
+        CMAKE_CXX_STANDARD 20
+        CMAKE_CXX_STANDARD_REQUIRED ON
+        )
+
+
+target_include_directories(${OUT_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/includes
+        ${CMAKE_CURRENT_BINARY_DIR}
+        )
+
+
+target_link_libraries(${OUT_NAME}
+        PUBLIC
+        Qt5::Core
+        )
+
+
+endsnippet
+
+snippet	cmakeMain "prepare cmake for main 6.2"
+cmake_minimum_required(VERSION 3.16)
+
+project(StartAndroid LANGUAGES CXX)
+
+set(PROJECT_NAME "appStartAndroid")
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+
+find_package(QT NAMES Qt6 COMPONENTS Core Quick Multimedia REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick Multimedia REQUIRED)
+
+
+project(StartAndroid VERSION 0.1 LANGUAGES CXX)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
+
+
+# For the editor to display modules.
+# main.cpp add (engine.addImportPath(":/")
+set(QML_IMPORT_PATH ${CMAKE_CURRENT_LIST_DIR}/qml
+    CACHE STRING "Qt Creator 6.2 extra qml import paths"
+    FORCE)
+
+
+set(PROJECT_SOURCES
+    main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/misc/resources.qrc
+    ${CMAKE_CURRENT_LIST_DIR}/qml/qml.qrc
+)
+
+set(PROJECT_HEADERS
+    ${QML_IMPORT_PATH}
+)
+
+qt_add_executable(appStartAndoird
+    ${PROJECT_HEADERS}
+    ${PROJECT_SOURCES}
+)
+
+qt_add_qml_module(appStartAndoird
+    URI StartAndroid
+    VERSION 1.0
+    QML_FILES main.qml
+)
+
+target_include_directories(appStartAndoird
+    PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/includes
+    ${CMAKE_CURRENT_LIST_DIR}/qml
+    ${CMAKE_CURRENT_LIST_DIR}/misc
+    )
+
+set_target_properties(appStartAndoird PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+# add_subdirectory(tests)
+
+target_link_libraries(appStartAndoird
+    PRIVATE Qt6::Quick)
+
+install(TARGETS appStartAndoird
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endsnippet

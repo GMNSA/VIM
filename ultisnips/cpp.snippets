@@ -1,0 +1,328 @@
+snippet tmain "main for testGoogle"
+#include <gtest/gtest.h>
+
+TEST(${1:nameFunctionWhichWillCheck}, ${2:nameTestFunc})
+{
+	${3:EXPECT_EQ(binarySearch(arg, 0), 1);}
+}
+
+int main(int argc, char** argv)
+{
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+}
+endsnippet
+
+# --------------------------------------------------
+
+snippet tfunction "function for testGoogle"
+TEST(${1:nameFunctionWhichWillCheck}, ${2:nameTestFunc})
+{
+	${3:EXPECT_EQ(binarySearch(arg, 0), 1);}
+}
+endsnippet
+
+# --------------------------------------------------
+
+snippet tincludegt "google tests"
+#include <gtest/gtest.h>
+endsnippet
+
+# --------------------------------------------------
+
+snippet ifn 	"ma(c|k)ros #ifndef ..."
+#ifndef ${1:filename}
+#define $1
+
+#endif // $1
+endsnippet
+
+# --------------------------------------------------
+
+snippet con 	"connect ..."
+
+// ----- connect -----
+${1:connect}
+// end connect -------
+endsnippet
+
+# --------------------------------------------------
+
+snippet cls 	"class without comment ..."
+
+class ${1:TestClass} ${2}
+{
+public:
+    $1() ${3:= default;}
+    virtual ~$1() {}
+
+protected:
+
+private:
+	${4:std::string} ${5:m_name;}
+};
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet scls 	"simple class..."
+
+class ${1:TestClass}
+{
+public:
+    $1() = default;
+    virtual ~$1() {}
+
+protected:
+private:
+};
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet icls 	"class without comment ..."
+
+class I${1:TestClass}
+{
+public:
+    I$1() = default;
+    virtual ~I$1() {}
+};
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet acls 	"class without comment ..."
+
+class Abstract${1:TestClass}
+{
+public:
+    Abstract$1() ${2:= default;}
+    virtual ~Abstract$1() {}
+
+protected:
+private:
+};
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet set 	"setter ..."
+
+void set${1:name}(${3:std::string} ${2:aName})
+{
+	m_${1/\w+\s*/\l$0/g} = $2;
+}
+endsnippet
+
+# --------------------------------------------------
+
+snippet get 	"getter ..."
+
+${2:std::string} ${1:name}() const
+{
+	return (m_${1/\w+\s*/\l$0/g});
+}
+endsnippet
+
+# --------------------------------------------------
+
+snippet setget 	"setter, getter ..."
+
+void set${1:name}(${3:std::string} const a$1)
+{
+	m_${1/\w+\s*/\l$0/g} = a$1;
+}
+
+$3 ${1/\w+\s*/\l$0/g}() const
+{
+	return (m_${1/\w+\s*/\l$0/g});
+}
+endsnippet
+
+# --------------------------------------------------
+snippet str 	"std::string"
+std::string ${1:name}
+endsnippet
+
+# --------------------------------------------------
+snippet del 	"delete ...."
+delete (${1:pTest});
+endsnippet
+
+# --------------------------------------------------
+snippet tcls 	"google test class"
+
+class SuiteName :
+	public ::testing::Test
+{
+protected:
+	virtual void TearDown()
+	{
+	}
+
+	virtual void SetUp()
+	{
+	}
+
+	Test *suite;
+
+};
+
+TEST_F(Suite, ThrowException)
+{
+}
+
+endsnippet
+
+# --------------------------------------------------
+snippet try 	"try catch"
+
+try
+{
+
+}
+catch ( std::invalid_argument &err)
+{
+
+}
+
+endsnippet
+
+# --------------------------------------------------
+snippet tcout 	"check cout output..."
+
+testing::internal::CaptureStdout();
+std::cout << "testing";
+std::string output = testing::internal::GetCapturedStdout();
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet gtesth 	"header gtest"
+
+#include <gtest/gtest.h>
+
+class ${1:myTestFixture1}: public ::testing::Test {
+public:
+   $1( ) {
+       // initialization code here
+   }
+
+   void SetUp( ) {
+       // code here will execute just before the test ensues
+   }
+
+   void TearDown( ) {
+       // code here will be called just after the test completes
+       // ok to through exceptions from here if need be
+   }
+
+   ~$1( )  {
+       // cleanup any pending stuff, but no exceptions allowed
+   }
+
+   // put in any custom data members that you need
+};
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet gtestc 	"cpp gtest"
+
+TEST_F(FooTest, DoesXyz) {
+  // Exercises the Xyz feature of Foo.
+}
+
+int main(int argc, char **argv) {
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+endsnippet
+
+# --------------------------------------------------
+snippet testCmake 	"example qTest for Cmake"
+
+#include <QtTest>
+
+class TestModelPuzzle : public QObject
+{
+Q_OBJECT
+
+public:
+	TestModelPuzzle();
+	~TestModelPuzzle();
+
+	private slots:
+		void test_case1();
+	void test_puzzle();
+
+};
+
+TestModelPuzzle::TestModelPuzzle() {}
+
+TestModelPuzzle::~TestModelPuzzle() {}
+
+	void
+TestModelPuzzle::test_case1()
+{}
+
+	void
+TestModelPuzzle::test_puzzle()
+{
+	QVERIFY2(true, "TESTING FOR TEST");
+
+}
+
+QTEST_APPLESS_MAIN(TestModelPuzzle)
+#include "tst_modelpuzzle.moc"
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet autor 	"prepare 21"
+
+/*                                              ############       ####       */
+/*                                              ############       ####       */
+/*          *.h                                             ####       ####   */
+/*                                                          ####       ####   */
+/*   By: probiuss@student.21-school.ru              ########           ####   */
+/*                                                  ########           ####   */
+/*                                              ####                   ####   */
+/*   Created: 2023-01-01                        ####                   ####   */
+/*   Updated: 2023-01-20                            ############       ####   */
+/*                                                  ############       ####   */
+/* ************************************************************************** */
+
+endsnippet
+
+# --------------------------------------------------
+
+snippet todo "TODO(username): description"
+// TODO(${1:probiuss}): ${2:description}
+endsnippet
+
+# --------------------------------------------------
+
+snippet main_qt_for_project "main qt for project"
+#include "mainwindow.hpp"
+
+#include <QApplication>
+
+int main(int argc, char *argv[]) {
+  QApplication a(argc, argv);
+  MainWindow w;
+  w.show();
+  return a.exec();
+}
+
+endsnippet
+

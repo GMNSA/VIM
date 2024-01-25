@@ -1,0 +1,199 @@
+snippet fun "function for trigger"
+CREATE OR REPLACE FUNCTION ${1:name_function}()
+RETURNS trigger AS
+$$ BEGIN
+
+${2:NEW.full_name = CONCAT(NEW.first_name, ' ', NEW.last_name);}
+
+RETURN NEW;
+
+END $$
+LANGUAGE 'plpgsql';
+endsnippet
+# ------------------------------------------------------
+snippet fun2 "function for trigger"
+CREATE OR REPLACE FUNCTION ${1:name_function}()
+RETURNS trigger AS
+$BODY$
+BEGIN
+
+${2:NEW.full_name = CONCAT(NEW.first_name, ' ', NEW.last_name);}
+
+RETURN NEW;
+
+END;
+$BODY$
+LANGUAGE plpgsql VOLATILE
+COST 100;
+endsnippet
+# ------------------------------------------------------
+snippet fun3 "function example3 for trigger"
+CREATE OR REPLACE FUNCTION fn_trg_friends_insert()
+RETURNS TRIGGER AS $$
+DECLARE
+
+BEGIN
+
+END;
+$$ LANGUAGE plpgsql;
+endsnippet
+# ------------------------------------------------------
+snippet trigib "trigger insert before"
+CREATE TRIGGER ${1:"update_employes_on_insert_trigger"}
+BEFORE INSERT ON ${2:Employers}
+FOR EACH ROW
+EXECUTE PROCEDURE ${3:"update_full_name"()};
+endsnippet
+
+snippet trigub "trigger update before"
+CREATE TRIGGER ${1:"update_employes_on_update_trigger"}
+BEFORE INSERT OF first_name, last_name ON Employers
+FOR EACH ROW WHEN ((NEW.first_name != OLD.first_name) or (NEW.last_name != OLD.last_name))
+EXECUTE PROCEDURE "update_full_name"();
+endsnippet
+
+snippet procedure "procedure"
+CREATE OR REPLACE PROCEDURE import_table_from_csv(
+    table_name TEXT,
+    file_path TEXT,
+    separator CHAR(1) DEFAULT ','
+)
+    LANGUAGE plpgsql AS
+$$
+DECLARE
+    sql_query TEXT;
+BEGIN
+    sql_query := FORMAT(
+            'COPY %I FROM %L WITH (FORMAT CSV, HEADER, DELIMITER %L)',
+            table_name,
+            file_path,
+            separator
+         );
+    EXECUTE sql_query;
+    RAISE NOTICE 'Data imported from file: %', file_path;
+END;
+$$
+endsnippet
+
+snippet funv "void function postgres"
+CREATE OR REPLACE FUNCTION import_data_from_csv(
+    tablename TEXT,
+    filepath TEXT,
+    sep CHAR(1) DEFAULT ';'
+) RETURNS VOID AS $$
+DECLARE
+    sql_query TEXT;
+BEGIN
+    sql_query := FORMAT(
+            'COPY %s FROM %L WITH (FORMAT CSV, HEADER, DELIMITER %L)',
+            tablename,
+            filepath,
+            sep
+         );
+    EXECUTE sql_query;
+    RAISE NOTICE 'Data import from csv file %s', filepath;
+END;
+$$ LANGUAGE plpgsql;
+endsnippet
+
+snippet type "create type psql"
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'check_status') THEN
+    CREATE TYPE check_status AS ENUM ('Start', 'Success', 'Failure');
+  ELSE
+    RAISE DEBUG 'Type check_status already exists';
+  END IF;
+END $$;
+endsnippet
+
+snippet if "if else type psql"
+IF (NEW.Peer = NEW.RecommendedPeer) THEN
+	RETURN NULL;
+ELSE
+	RETURN NEW;
+END IF;
+endsnippet
+
+snippet proc "procedure example"
+CREATE OR REPLACE PROCEDURE pr_p2p_check(
+) AS $$
+DECLARE
+
+BEGIN
+
+RAISE NOTICE 'OK';
+
+END;
+$$ LANGUAGE plpgsql;
+endsnippet
+# -- -------------------------------------------- --
+snippet test "postgres tests [example]"
+BEGIN;
+DO $$
+DECLARE
+    n_count         INT := 0;
+    n_p2p           INT := (SELECT COUNT(*) FROM P2P);
+    n_checks        INT := (SELECT COUNT(*) FROM Checks);
+    p2p_max_id      INT := fn_max_id('P2P');
+    checks_max_id   INT := fn_max_id('Checks');
+    checked_user    TEXT := 'Malk';
+    checker_user    TEXT := 'Kolayn';
+    p2p_row         P2P%rowtype;
+    check_row       Checks%rowtype;
+BEGIN
+    PERFORM fn_print('-- # -- START TEST fn_trg_p2p_transferred_points_insert -- # --');
+
+    PERFORM fn_print('                    -- [ OK ] --');
+    RAISE NOTICE '%', CURRENT_TIME;
+END;
+$$ language plpgsql;
+ROLLBACK;
+endsnippet
+
+snippet rai "raise notice [example]"
+RAISE NOTICE 'RESULT: %', TEMP;
+endsnippet
+# -- -------------------------------------------- --
+snippet funt "[function return table]"
+CREATE OR REPLACE FUNCTION fn_human_readable_transferred_points()
+RETURNS TABLE(Peer1 TEXT, Peer2 TEXT, PointsAmount BIGINT) AS
+$$ BEGIN
+return QUERY(
+    SELECT
+        tp1.CheckingPeer                    AS Peer1,
+        tp1.CheckedPeer                     AS Peer2,
+        CASE
+        WHEN tp2.ID IS NOT NULL THEN
+            (tp1.PointsAmount - tp2.PointsAmount)
+        ELSE
+            tp1.PointsAmount
+        END AS PointsAmount
+    FROM TransferredPoints AS tp1
+    LEFT JOIN TransferredPoints AS tp2 ON tp1.ID != tp2.ID AND
+        tp1.CheckingPeer = tp2.CheckedPeer AND
+        tp1.CheckedPeer = tp2.CheckingPeer
+);
+END $$
+LANGUAGE 'plpgsql';
+endsnippet
+# -- -------------------------------------------- --
+snippet p_proc "[print procedure]"
+CREATE OR REPLACE PROCEDURE show_all_data()
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    row record;
+BEGIN
+    FOR row IN SELECT * FROM TransferredPoints LOOP
+        RAISE NOTICE 'ID: %, checkingpeer: %, checkedpeer: %, pointsamount: %',
+        row.id,
+        row.CheckingPeer,
+        row.CheckedPeer,
+        row.PointsAmount;
+    END LOOP;
+END;
+$$;
+
+CALL show_all_data();
+endsnippet

@@ -1,0 +1,55 @@
+snippet test_example "prepare testsing file"
+#include <check.h>
+#include <stdio.h>
+
+#define IS_TEST_TURN_ON 0
+
+int eq_double(double num1, double num2) { return fabs(num1 - num2) < 1e-5; }
+
+START_TEST(ADisgulsedSequenceI) {}
+END_TEST
+
+// -- -------------------------------------------- --
+
+START_TEST(alTERnaTIngcAsE) {
+  // ck_assert_int_eq(res.columns, 3);
+}
+END_TEST
+
+START_TEST(s21_for_single_test) {
+  // TODO: test for degug
+}
+END_TEST
+
+// -------------------------------------------------------
+
+void help_functions_test(TCase *tc1_1) {
+  tcase_add_test(tc1_1, ADisgulsedSequenceI);
+  tcase_add_test(tc1_1, alTERnaTIngcAsE);
+}
+
+void for_single_test(TCase *tc1_1) {
+  tcase_add_test(tc1_1, s21_for_single_test);
+}
+
+// -------------------------------------------------------
+
+int main(void) {
+  Suite *s1 = suite_create("Core");
+  TCase *tc1_1 = tcase_create("Core");
+  SRunner *sr = srunner_create(s1);
+  int nf;
+
+  suite_add_tcase(s1, tc1_1);
+
+  help_functions_test(tc1_1);
+  for_single_test(tc1_1);
+
+  srunner_set_fork_status(sr, CK_NOFORK);
+  srunner_run_all(sr, CK_ENV);
+  nf = srunner_ntests_failed(sr);
+  srunner_free(sr);
+
+  return nf == 0 ? 0 : 1;
+}
+endsnippet

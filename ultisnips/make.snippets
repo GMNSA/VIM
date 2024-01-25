@@ -1,0 +1,167 @@
+snippet make_example "main for testGoogle"
+
+CC=g++
+CFLAGS= -g -std=c++17 -Wall -Wextra -Werror
+
+EXECUTABLE:=a.out
+SOURCES:=srcs/test_matrix_oop.cpp
+OBJECTS=$(SOURCES:.cpp=.o)
+
+EXECUTABLE_TEST:=test.out
+
+HEADERS=-I./includes
+#/usr/include/gtest
+LDFLAGS=./libs/libinput.a ./libs/libstring.a
+# LDSHAREDFLAGS=-L/usr/lib64/ -lexpat
+
+all: build
+
+.cpp.o:
+	@echo "Compiling"
+	$(CC)  $(CFLAGS) $(HEADERS) ${SOURCES} -L/usr/include/gtest  $< -o $@
+
+clean:
+	rm -f $(EXECUTABLE) $(OBJECTS)
+
+
+rebuild: clean build
+
+
+build: $(EXECUTABLE) $(OBJECTS)
+
+$(EXECUTABLE) : $(OBJECTS)
+	@echo "Linking"
+	$(CC) $(OBJECTS) $(LDFLAGS)  -o $@
+
+
+endsnippet
+
+# -- -------------------------------------------- --
+snippet mqt_project "makefile for qt project"
+current_os := $(shell sh -c 'uname -s 2>/dev/null || echo not')
+
+.PHONY: all clean rebuild check test_model test
+
+all: checkdir install start
+
+# ifeq ($(current_os), Linux)
+# 	firefox ./code_c/gcov_report/index.html
+# else
+# 	open ./code_c/gcov_report/index.html
+# endif
+#
+
+clean:
+	rm -rf ./BUILD
+# 	rm -f CMakeLists.txt.user
+	rm -rf ./libBin
+	rm -rf ./includes/View/ui_mainwindow.h
+
+install:
+	cd BUILD && cmake .. && make
+
+checkdir :
+	@echo "checkdir"
+	# @if [ ! -d $(DIR) ] ; then
+		mkdir -p BUILD
+	# fi
+
+check_leack:
+	# valgrind --tool=memcheck --leak-check=yes --track-origins=yes --leak-check=full --show-leak-kinds=all ./BUILD/bin/DJControl
+	valgrind ./BUILD/bin/DJControl
+
+start:
+	./BUILD/bin/DJControl
+
+tar:
+	tar -cf DJControl.tar ./*
+
+test_model: checkdir install
+	./BUILD/bin_test/testModel
+
+test: test_model
+
+endsnippet
+# -- -------------------------------------------- --
+snippet makefile_for_c "Makefile example for c_pure..."
+CC=gcc
+CFLAGS:=-g -Werror -Wextra -Wall -std=c11 -pedantic
+LDFLAGS:=-lcheck -lgcov
+GCOFFLAGS:= -fprofile-arcs -ftest-coverage
+
+ifeq ($(shell uname), Linux)
+$(info "[OS] << --- >>> Linux")
+LDFLAGS+=-pthread -lrt -lm  -fsanitize=address
+else
+$(info "[OS] << --- >>> MacOS")
+endif
+
+HEADERS:=./includes/
+
+EXECUTABLE:=a.out
+SOURCES:=srcs/main.c srcs/helpfunctions.c
+OBJECTS:=$(addprefix objects/, $(subst srcs/,,$(SOURCES:.c=.o) ))
+
+EXECUTABLE_GCOV:=test.out
+SOURCES_GCOV:=tests/tests.c srcs/helpfunctions.c
+OBJECTS_GCOV:=$(addprefix objects_gcov/, $(subst srcs/,,$(subst tests/,,$(SOURCES_GCOV:.c=.o))))
+
+
+all: build start
+
+rebuild: clean build
+
+build: $(EXECUTABLE) $(OBJECTS)
+
+build_test: $(EXECUTABLE_GCOV) $(OBJECTS_GCOV)
+
+tests: build_test start_test
+
+rebuild_test: clean build_test
+
+open:
+	firefox gcov_report/index.html
+
+start:
+	./a.out
+
+start_test:
+	./test.out
+
+clean:
+	rm -rf $(OBJECTS)
+	rm -f $(EXECUTABLE)
+	rm -f $(EXECUTABLE_GCOV)
+	rm -rf $(OBJECTS_GCOV)
+	rm -rf ./gcov_report/*
+	rm -f ./objects_gcov/coverage.info
+
+# -- -- --
+
+objects/%.o : srcs/%.c
+	@echo "Compiling: " -- $< -o $@
+	$(CC) -I $(HEADERS) $(CFLAGS) -c $< -o $@
+
+$(EXECUTABLE) : $(OBJECTS)
+	@echo "Linking: " -- -c $(OBJECTS) -o $(EXECUTABLE)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+
+# -- -- --
+
+objects_gcov/%.o : */%.c
+	@echo "Compiling gcov: " -- $< -o $@
+	$(CC) -I $(HEADERS) -p $(GCOFFLAGS) $(CFLAGS) -c $< -o $@
+
+$(EXECUTABLE_GCOV) : $(OBJECTS_GCOV)
+	@echo "Linking gcov: " -- -c $(OBJECTS_GCOV) -o $(EXECUTABLE_GCOV)
+	$(CC) $(LDFLAGS) $(OBJECTS_GCOV) -o $(EXECUTABLE_GCOV) $(GCOFFLAGS)
+
+# -- -- --
+
+gcov_report: tests
+	lcov -c -d objects_gcov/. -o objects_gcov/coverage.info
+	lcov --remove objects_gcov/coverage.info 'tests/*' --output-file objects_gcov/coverage.info
+	genhtml objects_gcov/coverage.info --output-directory gcov_report
+
+.PHONY: all rebuild build start clean gcov_report build_test rebuild_test tests open
+endsnippet
