@@ -9,103 +9,186 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'tpope/vim-fugitive'
-Plugin 'git://git.wincent.com/command-t.git'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
- 
- 
-Plugin 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
- 
 "Autocompleted
 Plugin 'Valloric/YouCompleteMe'
 
-" Neomake
-" Plugin 'neomake/neomake'
+"vim-plug qt support for vim""
+" Plugin 'cpiger/vim-qt'
 
-" qml
+"vim-qrc
+" Plugin 'EdTsft/vim-qrc'
+
+"Markdown (md - extensions)
+Plugin 'jamshedvesuna/vim-markdown-preview'
+
+" shaders
+Plugin 'tikhomirov/vim-glsl'
+
+Plugin 'tpope/vim-fugitive'
+
+" ALE analysis
+" Plugin 'dense-analysis/ale'
+Plugin 'w0rp/ale'
+" gtest
+Plugin 'alepez/vim-gtest'
+" Plugin 'rhysd/vim-lsp-ale'
+
+"Plugin 'git: //git.wincent.com/command-t.git'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
+" https: //github.com/sheerun/vim-polyglot // not use
+" Plugin 'sheerun/vim-polyglot'
+
+Plugin 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+
+" visualizes undo history
+Plugin 'mbbill/undotree'
+
+"qml
 Plugin 'peterhoeg/vim-qml'
+" Plugin 'pboettch/vim-cmake-syntax'
 
-"Autocompleted
-" Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+" qt
+" Plugin 'townk/vim-qt'
 
-" CMake
+"vimspector
+Plugin 'puremourning/vimspector'
+
+"CMake
 Plugin 'vhdirk/vim-cmake'
 
 "Закрывающие скобки
 Plugin 'jiangmiao/auto-pairs'
-" 
-" "Python-mode
-Plugin 'python-mode/python-mode', { 'branch': 'develop' }
- 
-" "neocomplete
-" Plugin 'shougo/neocomplete.vim'
- 
+
+
 " AsyncRun
 Plugin 'skywind3000/asyncrun.vim'
-" 
+
 "Подсветка изменений файлов
-Plugin 'airblade/vim-gitgutter'
- 
+" Plugin 'airblade/vim-gitgutter'
+
 "Открывание файлов
 Plugin 'kien/ctrlp.vim'
- 
+
 "jedi-vim
-Plugin 'davidhalter/jedi-vim'
- 
+" Plugin 'davidhalter/jedi-vim'
+
+"Python-mode
+" Plugin 'python-mode/python-mode', { 'branch': 'develop' }
+" Plugin 'klen/python-mode'
+
 "Emmet
 Plugin 'mattn/emmet-vim'
- 
+
 "SuperTab
 " Plugin 'ervandew/supertab'
- 
+
 "Tagbar
-Plugin 'majutsushi/tagbar' 
- 
+Plugin 'majutsushi/tagbar'
+
 "fzf is a general-purpose command-line fuzzy finder.
 """Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
- 
+
 "Displays function signatures from completions in the command line.
-"""Plugin 'Shougo/echodoc.vim'
-" 
-" 
+"Plugin 'Shougo/echodoc.vim'
+
+
 "Syntacis
 " Plugin 'scrooloose/syntastic'
-" 
+
 " "C++
 " Plugin 'octol/vim-cpp-enhanced-highlight'
 """Plugin 'rip-rip/clang_complete'
- 
-Plugin 'fedorenchik/qt-support.vim'
+
+" Plugin 'fedorenchik/qt-support.vim'
 " qt doc web
-Plugin 'xaizek/vim-qthelp'
- 
+" Plugin 'xaizek/vim-qthelp'
+
 " Slime
-Plugin 'jpalardy/vim-slime'
- 
+" Plugin 'jpalardy/vim-slime'
+
 "GDB - debugger
 " Plugin 'vim-scripts/Conque-GDB'
- 
+
 "c.vim comments
 Plugin 'vim-scripts/DoxygenToolkit.vim'
- 
+
+" codefmt -- dependencies
+Plugin 'google/vim-maktaba'
+" codefmt
+Plugin 'google/vim-codefmt'
+" codefmt -- dependencies
+Plugin 'google/vim-glaive'
+
+" line space
+Plugin 'yggdroot/indentline'
+
 " " comments C/C++/python
 """Plugin 'doxygen/doxygen'
-" 
+
 " " powerline
-" Plugin 'powerline/powerline'
-" 
+Plugin 'powerline/powerline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+
 " "-------------------------------------
-" 
+
 "UltiSnips
 Plugin 'sirver/ultisnips'
-" 
+"
 " Snippets are separated from the engine. Add this if you want them:
 Plugin 'honza/vim-snippets'
 
+" theme
+Plugin 'ErichDonGubler/vim-sublime-monokai'
+" Plugin 'joshdick/onedark.vim'
+Plugin 'dracula/vim'
+
+" latex
+" Plugin 'lervag/vimtex'
+
+"psql
+Plugin 'lifepillar/pgsql.vim'
+
+" chatGpt
+" Plugin 'kamou/gpt-vim'
+
+"notion
+" Plugin 'felixhaeberle/vim-notion'
+
+" docker-compose
+Plugin 'skanehira/docker-compose.vim'
+
+" Leetcode
+Plugin 'ianding1/leetcode.vim'
+
+" vim-arsync (server)
+Plugin 'kenn7/vim-arsync'
+" vim-arsync depedencies
+Plugin 'prabirshrestha/async.vim'
+
+
+
 call vundle#end()            " required
+" codefmt --- dependency
+call glaive#Install()
+let g:dracula_colorterm = 0
+
+Glaive codefmt plugin[mappings]
+Glaive codefmt google_java_executable="java -jar /path/to/google-java-format-VERSION-all-deps.jar"
+"-------------------------------------------------------------------->>>>>>>>>
+
+"---Load debugger---------------------------------------------------->>>>>>>>>
+
+packadd termdebug
+" leg g:termdebug_wide=1
+let g:termdebug_wide = 163
+
+
 "-------------------------------------------------------------------->>>>>>>>>
 
 syntax on
+filetype on
 set colorcolumn=0
 
 
@@ -119,29 +202,13 @@ set colorcolumn=0
         catch /E539: /
         endtry
     endif
-    " let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
-    " let g:ycm_rust_src_path = '/home/neg/src/1st_level/rust_src17/rustc-nightly/src'
-    let g:ycm_filepath_completion_use_working_dir = 0
-    let g:ycm_confirm_extra_conf = 0
-    let g:ycm_cache_omnifunc = 1
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    "--[ syntastic enabling ]-----------------
-    let g:ycm_show_diagnostics_ui          = 1
-    let g:ycm_seed_identifiers_with_syntax = 0
-    let g:ycm_use_ultisnips_completer      = 1
-
-    " let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
-    " let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>']
-    " let g:ycm_key_invoke_completion = '<M-x>'
-    let g:ycm_autoclose_preview_window_after_insertion = 1
     nnoremap <leader>y :YcmForceCompileAndDiagnostics<cr>
 
     " let g:ycm_add_preview_to_completeopt = 1
-    " let g:ycm_autoclose_preview_window_after_completion = 0
-    " let g:ycm_autoclose_preview_window_after_insertion = 0
 
     let g:ycm_semantic_triggers =  {
         \   'c' : ['->', '.'],
+        \   'qml': ['.'],
         \   'objc' : ['->', '.'],
         \   'cpp,objcpp' : ['->', '.', '::'],
         \   'perl' : ['->'],
@@ -152,8 +219,6 @@ set colorcolumn=0
         \   'ocaml' : ['.', '#'],
         \   'ruby' : ['.', '::'],
         \ }
-
-    let g:ycm_collect_identifiers_from_tags_files = 0
 
     let g:ycm_filetype_blacklist = {
         \ 'notes'      : 1,
@@ -167,11 +232,13 @@ set colorcolumn=0
         \ 'vimwiki'    : 1,
         \ 'pandoc'     : 1,
         \ 'infolog'    : 1,
-        \ 'mail'       : 1
+        \ 'mail'       : 1,
+        \ 'qml'        : 1
         \}
 
+
     let g:ycm_min_num_identifier_candidate_chars = 4
-    let g:ycm_filetype_specific_completion_to_disable = {'javascript': 1, 'python': 1}
+    " let g:ycm_filetype_specific_completion_to_disable = {'javascript': 1, 'python': 1}
     let g:ycm_goto_buffer_command = 'vertical-split'
 
 	let g:clang_snippets_engine = 'ultisnips'
@@ -181,8 +248,8 @@ set colorcolumn=0
 	let g:clang_cpp_options = '-std=c++20 -stdlib=libc++'
 	let g:ycm_clangd_args = ['-log=verbose', '-pretty']
 
-	nnoremap <silent> <F3> :call youcompleteme#DisableCursorMovedAutocommands()<CR>
-	nnoremap <silent> <F4> :call youcompleteme#EnableCursorMovedAutocommands()<CR>
+	" nnoremap <silent> <F3> :call youcompleteme#DisableCursorMovedAutocommands()<CR>
+	" nnoremap <silent> <F4> :call youcompleteme#EnableCursorMovedAutocommands()<CR>
 
 	function! s:SetCompleteFunc()
 		if !g:neocomplete#force_overwrite_completefunc
@@ -205,7 +272,7 @@ set colorcolumn=0
 "!!!!!!!!!!!!!!!!
 " "------------------------------C++--------------------------
 " " https://habr.com/ru/post/221267/
-" 
+"
 " " make vim clang_complete.vmb -c 'so %' -c 'q'
 " " path to directory where library can be found
 " " let g:clang_library_path='/usr/lib/llvm-3.8/lib'
@@ -213,65 +280,64 @@ set colorcolumn=0
 " " or path directly to the library file
 " " let g:clang_library_path='/usr/lib/llvm3.5/lib/libclang.so.1'
 " " let g:clang_library_path='~/dotvim/ycm_dir/clang+llvm-8.0.0-aarch64-linux-gnu/lib/'
-" 
+"
 " " If equal to 1, it will do some snippets magic on code placeholders like
 " " function argument, template parameters, etc.
 " " let g:clang_snippets = 1
-" 
+"
 " " let g:clang_snippets_engine = 'clang_complete'
-" 
+"
 " " let g:clang_complete_auto = 1
 " " If equal to 1, open quickfix window on error.
-" 
+"
 " " let g:clang_complete_copen = 1
 " let g:clang_snippets_engine = 'ultisnips'
-" 
+"
 " " If equal to 0, nothing is selected.
 " " If equal to 1, automatically select the first entry in the popup menu, but
 " " without inserting it into the code.
 " " If equal to 2, automatically select the first entry in the popup menu, and
 " " insert it into the code.
 " let g:clang_auto_select = 0
-" 
+"
 " " Let clangd fully control code completion
 " let g:ycm_clangd_uses_ycmd_caching = 1
 " " Use installed clangd, not YCM-bundled clangd which doesn't get updates.
 " " let g:ycm_clangd_binary_path = exepath("clangd")
-" 
-" 
+"
+"
 " " Include additional hints (function arguments, templatest, etc.)
 " let g:clang_snippets = 1
-" 
-" " Use ultispips for additional hints (for templates hints 
+"
+" " Use ultispips for additional hints (for templates hints
 " " autogenerations were in dropdown menus)
-" let g:ycm_use_clangd = 1
-" 
+"
 " " let g:ycm_global_ycm_extra_conf = '~/dotvim/.ycm_extra_conf.py'
 " " let g:ycm_global_ycm_extra_conf = '/home/_who/dotvim/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
 " "let g:ycm_global_ycm_extra_conf = '~/dotvim/.vim/plugged/YouCompleteMe/STUFF/.ycm_extra_conf.py'
 " "let g:ycm_global_ycm_extra_conf = '~/dotvim/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
 " "let g:ycm_global_ycm_extra_conf = '~/WORK/cpp-prjects/test_prj/.ycm_extra_conf.py'
-" 
+"
 " " Automatically close the tips window after selection a tooltip
 " let g:clang_close_preview=1
-" 
-" 
+"
+"
 " " If equal to 1, it will add optional arguments to the function call snippet.
 " " Snippet replaceable object will not be only the argument, but the preceding
 " " comma will be included as well, so you can press backspace to delete the
 " " optional argument, while the replaceable is selected.
 " let g:clang_complete_optional_args_in_snippets = 1
-" 
+"
 " let g:clang_user_options = '-std=c++20'
 " let g:clang_c_options = '-std=gnu20'
 " let g:clang_cpp_options = '-std=c++20 -stdlib=libc++'
-" 
+"
 " " Note: This option is specific to clang_complete snippets engine.
 " " If equal to 1, clang_complete will add a trailing placeholder after functions
 " " to let you add you continue writing code faster.
 " " Default: 0
 " "let g:clang_trailing_placeholder = 1
-" 
+"
 " " Omnicppcomplete compatibility mode. Keeps omni auto-completion in control of
 " " omnicppcomplete, disables clang's auto-completion (|g:clang_complete_auto|)
 " " and enables only <C-X><C-U> as main clang completion function.
@@ -284,19 +350,19 @@ set colorcolumn=0
 
 " set exrc
 " set secure
-" 
+"
 " augroup project
 "   autocmd!
 "   autocmd BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
 " augroup END
-" 
+"
 " let &path.="src/include,/usr/include/AL,"
-" 
+"
 " set includeexpr=substitute(v:fname,'\\.','/','g')
-" 
+"
 " "start programm
 " "nnoremap :!./my_pr<cr>
-" 
+"
 " let g:ycm_server_keep_logfiles = 1
 " let g:ycm_server_log_level = 'debug'
 
@@ -304,11 +370,10 @@ set colorcolumn=0
 " as being relative to the folder of the file of the currently active buffer.
 " Setting this option will force YCM to always interpret relative paths as being
 " relative to Vim's current working directory.
-" 
+"
 " Default: '0'
 
-" let g:ycm_filepath_completion_use_working_dir = 1
-"------------------------------------------------------------ 
+"------------------------------------------------------------
 
 
 set laststatus=0 "2
@@ -326,6 +391,7 @@ nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 set scrolloff=3
 
 
+
 " Directories for swp files
 set dir=~/dotvim/vim_backups/swap/
 set backupdir=~/dotvim/vim_backups/backup/
@@ -336,13 +402,20 @@ set viewdir=~/dotvim/vim_backups/
 set foldmethod=indent
 
 
+
 filetype indent on
 set tabstop=4
 set shiftwidth=4
+set smarttab
 set smartindent
 set autoindent
-" set expandtab
+set expandtab ts=4 sw=4 ai
 
+autocmd FileType make set noexpandtab
+
+" latex (vimtext)
+let g:tex_flavor = 'latex'
+let g:vimtex_quickfix_mode = 0
 
 "Wrapping text by default
 set wrap
@@ -352,7 +425,9 @@ set linebreak
 set t_Co=256
 
 " colorscheme
-" colorscheme torte
+colorscheme dracula
+" colorscheme sublimemonokai
+" colorscheme onedark
 
 " Кодировка текста по умолчанию utf8
 set termencoding=utf8
@@ -370,6 +445,7 @@ set cursorline
 
 " Нумерация строк
 set relativenumber
+set number
 "autocmd InsertEnter * highlight CursorLine guifg=white guibg=blue ctermfg=white ctermbg=blue
 "autocmd InsertLeave * highlight CursorLine guifg=white guibg=darkblue ctermfg=white ctermbg=darkblue
 
@@ -438,11 +514,11 @@ endfunction
 
 "YouCompleteMe-------------------------
 
-let g:ycm_collect_identifiers_from_tags_files = 1 
-" ycm сам определяет подходящую версию интерпретатора, но, почему-то, 
+let g:ycm_collect_identifiers_from_tags_files = 1
+" ycm сам определяет подходящую версию интерпретатора, но, почему-то,
 " с 3 версией дополнения не показываются - ставим вторую.
 "let g:ycm_server_python_interpreter='python'
-let g:ycm_python_binary_path = '/usr/bin/python3.10'
+" let g:ycm_python_binary_path = '/usr/bin/python3'
 let g:ycm_use_clangd = 1
 
 " закрыть превью после ввода, например, при нажатии на закрывающую скобку ")"
@@ -457,30 +533,64 @@ let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming language
 let g:ycm_complete_in_comments = 1 " Completion in comments
 let g:ycm_complete_in_strings = 1 " Completion in string
 
+let g:ycm_python_binary_path = 'python3'
+let g:ycm_min_num_of_chars_for_completion = 1
+" let g:ycm_global_ycm_extra_conf = '~/.vim/.ycm_extra_conf.py'
+" let g:ycm_rust_src_path = '/home/neg/src/1st_level/rust_src17/rustc-nightly/src'
+let g:ycm_filepath_completion_use_working_dir = 0
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_cache_omnifunc = 1
+"--[ syntastic enabling ]-----------------
+let g:ycm_show_diagnostics_ui          = 1
+
+" let g:ycm_key_list_select_completion = ['<TAB>', '<Down>']
+" let g:ycm_key_list_previous_completion = ['<S-TAB>', '<Up>']
+" let g:ycm_key_invoke_completion = '<M-x>'
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+
+" youcomplete python
+
+" ./configure --with-features=huge \
+"             --enable-multibyte \
+"             --enable-python3interp=yes \
+"             --with-python3-config-dir=/usr/bin/python3-config \
+"             --enable-gui=gtk2 \
+"             --enable-cscope \
+"             --enable-fail-if-missing \
+"             --prefix=/usr/local
+
+
 
 "jedi-vim -----------------------------
 
-"let g:jedi#auto_initialization = 1
-"let g:jedi#auto_vim_configuration = 0
-let g:jedi#use_tabs_not_buffers = 1
-"let g:jedi#use_splits_not_buffers = "left"
-let g:jedi#popup_on_dot = 0
-"let g:jedi#popup_select_first = 0
-let g:jedi#show_call_signatures = "1"
+let g:jedi#completions_enabled = 0
+" let g:jedi#auto_initialization = 1
+" let g:jedi#auto_vim_configuration = 0
+" let g:jedi#use_splits_not_buffers = "left"
+" let g:jedi#popup_select_first = 0
 
-let g:jedi#goto_command = "<leader>d"
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = ""
+" let g:jedi#use_tabs_not_buffers = 1
+" let g:jedi#popup_on_dot = 0
+" let g:jedi#show_call_signatures = "1"
+
+" let g:jedi#goto_command = "<leader>d"
+" let g:jedi#goto_assignments_command = "<leader>g"
+" let g:jedi#goto_definitions_command = ""
 let g:jedi#documentation_command = "F"
-let g:jedi#usages_command = "<leader>n"
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = "<leader>r"
+" let g:jedi#usages_command = "<leader>n"
+" let g:jedi#completions_command = "<C-Space>"
+" let g:jedi#rename_command = "<leader>r"
+
+" let g:jedi#completions_enabled = 0
+
+
 
 
 "python-mode --------------------------
 
 let g:pymode_trim_whitespaces = 1
-let g:pymode = 1
+let g:pymode = 0
 let g:pymode_python = 'python3'
 let g:pymode_rope_completion = 1
 let g:pymode_rope_complete_on_dot = 1
@@ -504,7 +614,7 @@ let g:tagbar_iconchars = ['+', '-']
 "обеспечиваем переключатель
 " let g:tagbar_map_close = '<C-m>'
 
-let g:tagbar_map_jump = '<C-m>'
+" let g:tagbar_map_jump = '<C-m>'
 
 " let g:tagbar_ctags_bin = '~/dotvim/TEST/tagbar/'
 
@@ -530,7 +640,7 @@ let g:tagbar_type_javascript = {
 \}
 
 
-"История изменений 
+"История изменений
 "-----------------------------------------------------------------------
 
 if version >=703
@@ -552,16 +662,18 @@ function! ChangeBuf(cmd)
   execute a:cmd
 endfunction
 " nnoremap <silent> <C-i> : call ChangeBuf(":b#")<CR>
-nnoremap <silent> <C-o> : call ChangeBuf(":bn")<CR>
-nnoremap <silent> <C-i> : call ChangeBuf(":bp")<CR>
+" nnoremap <silent> <C-o> : call ChangeBuf(":bn")<CR>
+" nnoremap <silent> <C-i> : call ChangeBuf(":bp")<CR>
 
 " ~/.vimrc
 set tags+=tags,tags.vendors
 set tags+=tags;$HOME
 set tags+=tags;/usr/bin/ctags
 set tags+=/usr/share/doc/tags
-set tags+=/home/_who/Qt/Docs/Qt-5.15.2/tags
+" set tags+=/home/_who/Qt/Docs/tags
 " set tags+=/home/_who/Qt/tags
+" set tags+=/home/_who/Qt/Docs/Qt-5.15.2/qthelp/tags
+set tags+=/home/_who/Qt/Docs/Qt-6.6.1/tags
 
 
 
@@ -609,15 +721,26 @@ endif
 nmap <leader>l :set list!<CR>
 
 
-"------------------------------- COMMENTS python ---------------------------
 
-vnoremap <silent> # :s/^/#<cr>:noh<cr>
-vnoremap <silent> -# :s/^#//<cr>:noh<cr>
+if (&filetype == "cc" || &filetype == "c" || &filetype == "cpp")
+    "--------------------------COMMENTS C++------------------------------------
 
-"--------------------------COMMENTS C++------------------------------------
+    vnoremap <silent> # :s/^/\/\/ <cr>:noh<cr>
+    vnoremap <silent> -# :s/^\/\/ //<cr>:noh<cr>
+elseif (&filetype == 'sql')
+    "------------------------------- COMMENTS sql ---------------------------
+    vnoremap <silent> # :s/^/-- <cr>:noh<cr>
+    vnoremap <silent> -# :s/^-- //<cr>:noh<cr>
+else
+    "------------------------------- COMMENTS python ---------------------------
+    vnoremap <silent> # :s/^/# <cr>:noh<cr>
+    vnoremap <silent> -# :s/^# //<cr>:noh<cr>
+endif
 
-vnoremap <silent> @ :s/^/\/\/ <cr>:noh<cr>
-vnoremap <silent> -@ :s/^\/\/ //<cr>:noh<cr>
+
+" vnoremap <silent> # :s/^/ -- <cr>:noh<cr>
+" vnoremap <silent> -# :s/^ -- //<cr>:noh<cr>
+
 
 "------------------------- VIM SCRIPTS ---------------------------------
 
@@ -626,23 +749,24 @@ vnoremap <silent> -@ :s/^\/\/ //<cr>:noh<cr>
 
 "------------------------- Doxygen -------------------------------------
 
- let  g:C_UseTool_cmake   = 'yes'     
+ let  g:C_UseTool_cmake   = 'yes'
  let  g:C_UseTool_doxygen = 'yes'
 
 "-------------------------   GDB   -------------------------------------
 
 let g:ConqueTerm_Color = 2         " 1: strip color after 200 lines, 2: always with color
 let g:ConqueTerm_CloseOnEnd = 1    " close conque when program ends running
-let g:ConqueTerm_StartMessages = 0 " display warning messages if conqueTerm is configured incorrectly  
+let g:ConqueTerm_StartMessages = 0 " display warning messages if conqueTerm is configured incorrectly
 
 
 " set path += /home/_who/Qt/Tools/QtCreator/lib/Qt/lib
 
 "-------------------------   SLIME   -------------------------------------
 let g:slime_target = "vimterminal"
+" let g:slime_target = "tmux"
 
 "-------------------------   ASNCRUN   -----------------------------------
-nnoremap <F3> :AsyncRun ctags -R<CR>
+" nnoremap <F3> :AsyncRun ctags -R<CR>
 "
 "------------------- Shortcut Create FILE C -------------------------------
 "C++ Class Generator
@@ -765,7 +889,7 @@ function! s:GetDefinitionInfo()
   exe 'normal "aY'
   let s:defline = substitute(@a, ';\n', '', '')
 endfunction
- 
+
 function! s:ImplementDefinition()
   call append('.', s:defline)
   exe 'normal j'
@@ -797,13 +921,13 @@ endfunction
 " let g:neocomplcache_enable_camel_case_completion = 1
 " let g:neocomplcache_enable_underbar_completion   = 1
 " let g:neocomplcache_min_syntax_length            = 2
-" 
+"
 " if !exists('g:neocomplcache_force_omni_patterns')
 "   let g:neocomplcache_force_omni_patterns = {}
 " endif
-" 
+"
 " let g:neocomplcache_force_overwrite_completefunc = 1
-" 
+"
 " let g:neocomplcache_force_omni_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)'
 " let g:neocomplcache_force_omni_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)'
 "     \ . '\|\h\w*::'
@@ -811,7 +935,7 @@ endfunction
 "     \ . '\|\h\w*::'
 " let g:neocomplcache_force_omni_patterns.objcpp = '[^.[:digit:] *\t]\%(\.\|->\)'
 "     \ . '\|\h\w*::'
-" 
+"
 " inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
 " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
@@ -883,10 +1007,221 @@ function CheckFileType()
     endif
 endfunction
 
+" let g:ycm_auto_trigger = 0
 " let g:loaded_youcompleteme = 0
-" let g:ycm_show_diagnostics_ui = 0
+
 "--------------------------------------------------------------------------
-let g:qthelp_browser="firefox"
+
+" let g:qthelp_browser="firefox"
+let g:qthelp_browser="chromium"
+nnoremap <F1> :QHelpOnThis<CR>
+set filetype=detect
 
 "-------------------------------- SLIME CONFIG ----------------------------
+
+"------------------------------- DRACULA THEME ----------------------------
+
+let g:dracula_bold = 0
+let g:dracula_italic = 0
+let g:dracula_underline = 0
+let g:dracula_undercurl = 1
+let g:dracula_colorterm = 0
+
+" vimspector
+" packadd! vimspector
+let g:vimspector_enable_mappings = 'HUMAN'
+
+" mnemonic 'di' = 'debug inspect' (pick your own, if you prefer!)
+
+" for normal mode - the word under the cursor
+nmap <Leader>di <Plug>VimspectorBalloonEval
+" for visual mode, the visually selected text
+xmap <Leader>di <Plug>VimspectorBalloonEval
+
+" You may also wish to add mappings for navigating up/down the stack, toggling
+" the breakpoints window, and showing disassembly, for example:
+
+nmap <LocalLeader><F11> <Plug>VimspectorUpFrame
+nmap <LocalLeader><F12> <Plug>VimspectorDownFrame
+nmap <LocalLeader>B     <Plug>VimspectorBreakpoints
+nmap <LocalLeader>D     <Plug>VimspectorDisassemble
+
+sign define vimspectorBP            text=\ ● texthl=WarningMsg
+sign define vimspectorBPCond        text=\ ◆ texthl=WarningMsg
+sign define vimspectorBPLog         text=\ ◆ texthl=SpellRare
+sign define vimspectorBPDisabled    text=\ ● texthl=LineNr
+
+sign define vimspectorPC            text=\ ▶️ texthl=MatchParen linehl=CursorLine
+sign define vimspectorPCBP          text=●▶️  texthl=MatchParen linehl=CursorLine
+sign define vimspectorCurrentThread text=▶️   texthl=MatchParen linehl=CursorLine
+sign define vimspectorCurrentFrame  text=▶️   texthl=Special linehl=CursorLine
+let g:vimspector_sign_priority = {
+  \    'vimspectorBP':         800,
+  \    'vimspectorBPCond':     799,
+  \    'vimspectorBPLog':      798,
+  \    'vimspectorBPDisabled': 797,
+  \    'vimspectorPC':         999,
+  \ }
+
+let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
+
+"------------------------------- Airline ----------------------------------
+
+let g:airline_theme='dracula'
+
+"------------------------------- ALE VIM ----------------------------------
+
+" nnoremap <silent> <C-o> : call ChangeBuf(":bn")<CR>
+" nnoremap <silent> <C-i> : call ChangeBuf(":bp")<CR>
+nnoremap <silent> <C-o> <Plug>(ale_next)
+nnoremap <silent> <C-i> <Plug>(ale_previous)
+nnoremap <silent> <C-;> <Plug>(ale_fix)
+
+" nnoremap <silent> <C-u> <Plug>(ale_reset)
+" nnoremap <silent> <C-;> : ALEFix <CR>
+
+let g:ale_enabled = 0
+
+" let g:ale_linters = {
+" \   'c': ['ccls', 'clang'],
+" \   'cc': ['clang'],
+" \   'cpp': ['clang'],
+" \   'javascript': ['eslint'],
+" \    'php': ['php'],
+" \   'python': ['pyls', 'flake8'],
+" \   'vim': ['vint']
+" \ }
+
+" \   'cpp': ['cppcheck', 'clangtidy', 'cpplint'],
+let g:ale_linters = {
+\   'c': ['clang', 'cpplint'],
+\   'cpp': ['clangtidy', 'cpplint'],
+\   'py': ['flake8', 'pylint'],
+\ }
+
+
+
+let g:ale_fixers = {
+\   '*': ['trim_whitespace'],
+\   'cpp': ['clang-format'],
+\   'c': ['clang-format'],
+\   'css': ['prettier'],
+\   'go': ['gofmt'],
+\   'html': ['prettier'],
+\   'javascript': ['prettier'],
+\   'json': ['prettier'],
+\   'php': ['prettier'],
+\   'python': ['autopep8', 'yapf'],
+\   'scss': ['prettier'],
+\   'yaml': ['prettier'],
+\ }
+
+"python settings
+
+let g:ale_cpp_cc_options = '-std=c++17 -Wall -Wextra -Werror --style=Google'
+let g:ale_cpp_qt_macros = ['slots']
+" let g:ale_cpp_clang_options = '-xc++'
+" let g:ale_cpp_clang_header_file_extensions = ['h']
+" let g:ale_cpp_clang_format_executable = 'clang-format'
+" let g:ale_cpp_clang_format_options = '-style=file'
+" let g:ale_cpp_clang_format_use_global = 1
+" let g:ale_cpp_clang_format_fallback_style = 'none'
+
+let g:ale_c_gcc_options = '-Wall -Wextra -Werror -std=c17 --style=Google'
+
+" Write this in your vimrc file
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_insert_leave = 0
+" You can disable this option too
+" if you don't want linters to run on opening a file
+let g:ale_lint_on_enter = 0
+
+" show 5 lines of errors (default: 10)
+let g:ale_list_window_size = 5
+
+let g:ale_fix_on_save = 1
+let g:ale_sign_error = '●'
+let g:ale_sign_warning = '?'
+
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
+
+    return l:counts.total == 0 ? 'OK' : printf(
+        \   '%d⨉ %d⚠ ',
+        \   all_non_errors,
+        \   all_errors
+        \)
+endfunction
+
+set statusline+=%=
+set statusline+=\ %{LinterStatus()}
+
+"------------------------------- LSP configurations for vim-lsp --------------
+
+" if executable('gopls')
+"     autocmd User lsp_setup call lsp#register_server({
+"         \   'name': 'gopls',
+"         \   'cmd': ['gopls'],
+"         \   'allowlist': ['go', 'gomod'],
+"         \ })
+" endif
+
+"------------------------------- vim-glsl shaders ----------------------------
+" vim: set ft=glsl:
+"------------------------------- show and hide numbers ----------------------------
+nnoremap <silent> <C-9> : set nonumber norelativenumber <CR>
+nnoremap <silent> <C-8> : set number relativenumber<CR>
+"------------------------------- undotree ----------------------------
+nnoremap <F2> :UndotreeToggle<CR>
+set undofile
+"------------------------------- undotree ----------------------------
+
+fun! HighlightExtraWhitespace()
+   if exists('b:ews') && b:ews == 1
+     "echom "-- Adding ExtraWhitespace hilighting"
+      highlight ExtraWhitespace ctermbg=red guibg=red
+   else
+     "echom "-- Removing ExtraWhitespace hilighting"
+      highlight clear ExtraWhitespace
+   endif
+endfun
+au ColorScheme * call HighlightExtraWhitespace()
+
+
+"------------------------------- markdown settings ---------------------------
+let vim_markdown_preview_browser='firefox'
+let vim_markdown_preview_hotkey='<C-m>'
+" let vim_markdown_preview_github=1
+
+"------------------------------- psql ---------------------------
+let b:sql_type_override='pgsql' | set ft=sql
+
+"------------------------------- chat-gpt ---------------------------
+
+"------------------------------- notion --------------------------<token>-
+
+"--------------------------- tab avigation -------------------------------
+nnoremap th  :tabfirst<CR>
+nnoremap tk  :tabnext<CR>
+nnoremap tj  :tabprev<CR>
+nnoremap tl  :tablast<CR>
+nnoremap tt  :tabedit<Space>
+nnoremap tn  :tabnext<Space>
+nnoremap tm  :tabm<Space>
+nnoremap td  :tabclose<CR>
+
+"
+"--------------------------- Leetcode -------------------------------
+" let g:leetcode_browser="firefox"
+let g:leetcode_browser="chromium"
+
+
+"--------------------------- TURN OFF | ON  -------------------------
+" let g:loaded_youcompleteme = 0
+
+"--------------------------- vim-arsync   -------------------------
+let $SSH_AUTH_SOCK = $HOME . '/.ssh/ssh-agent.sock'
+let $PATH = '/usr/local/bin:/usr/bin:/bin'
 

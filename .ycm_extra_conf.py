@@ -1,55 +1,69 @@
-# This file is NOT licensed under the GPLv3, which is the license for the rest
-# of YouCompleteMe.
-#
-# Here's the license text for this file:
-#
-# This is free and unencumbered software released into the public domain.
-#
-# Anyone is free to copy, modify, publish, use, compile, sell, or
-# distribute this software, either in source code form or as a compiled
-# binary, for any purpose, commercial or non-commercial, and by any
-# means.
-#
-# In jurisdictions that recognize copyright laws, the author or authors
-# of this software dedicate any and all copyright interest in the
-# software to the public domain. We make this dedication for the benefit
-# of the public at large and to the detriment of our heirs and
-# successors. We intend this dedication to be an overt act of
-# relinquishment in perpetuity of all present and future rights to this
-# software under copyright law.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
-#
-# For more information, please refer to <http://unlicense.org/>
-
+import os
+import ycm_core
 
 flags = [
-        '-Wall',
-        '-Wextra',
-        '-Werror',
-        '-Wno-long-long',
-        '-Wno-variadic-macros',
-        '-fexceptions',
-        '-ferror-limit=10000',
-        '-DNDEBUG',
-        '-std=c++17',
-        '-xc++',
-        '-I/usr/lib/',
-        '-I/usr/include/qt',
-        '-I/usr/include/qt/QtWidgets',
-        '-I/usr/include/qt/QtGui',
-        '-I/usr/include/qt/QtCore',
-        '-I/usr/include/qt/QtXml',
-        '-I/usr/lib/qt/mkspecs/linux-g++',
-        # '-I/HOME_DIR/USER/QT'
-        ]
+    '-Wall',
+    '-Wextra',
+    '-Werror',
+    '-isystem',
+    '-Wno-long-long',
+    '-Wno-variadic-macros',
+    '-fexceptions',
+    '-ferror-limit=10000',
+    '-DNDEBUG',
+    '-std=c11', 
+    '-x',
+    'c',       
+    "-fPIE",
+    '-I/usr/lib/',
+    '/usr/include',
+    '/usr/local/include',
+    '-I/cat/includes/',
+    '-I/grep/includes/',
+]
 
 
-def Settings(**kwargs):
-    return {'flags': flags}
+compilation_database_folder = ''
+
+if os.path.exists( compilation_database_folder ):
+  database = ycm_core.CompilationDatabase( compilation_database_folder )
+else:
+  database = None
+
+SOURCE_EXTENSIONS = [ '.cpp', '.cxx', '.cc', '.c', '.m', '.mm']
+
+def DirectoryOfThisScript():
+  return os.path.dirname( os.path.abspath( __file__ ) )
+
+def IsHeaderFile( filename ):
+  extension = os.path.splitext( filename )[ 1 ]
+  return extension in [ '.h', '.hxx', '.hpp', '.hh' ]
+
+def GetCompilationInfoForFile( filename ):
+  if IsHeaderFile( filename ):
+    basename = os.path.splitext( filename )[ 0 ]
+    for extension in SOURCE_EXTENSIONS:
+      replacement_file = basename + extension
+      if os.path.exists( replacement_file ):
+        compilation_info = database.GetCompilationInfoForFile(
+          replacement_file )
+        if compilation_info.compiler_flags_:
+          return compilation_info
+    return None
+  return database.GetCompilationInfoForFile( filename )
+
+def Settings( **kwargs ):
+  if not database:
+    return {
+      'flags': flags,
+      'include_paths_relative_to_dir': DirectoryOfThisScript()
+    }
+  filename = kwargs[ 'filename' ]
+  compilation_info = GetCompilationInfoForFile( filename )
+  if not compilation_info:
+    return None
+
+  return {
+    'flags': list( compilation_info.compiler_flags_ ),
+    'include_paths_relative_to_dir': compilation_info.compiler_working_dir_
+  }
